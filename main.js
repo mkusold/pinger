@@ -13,16 +13,29 @@ function alertSuccess(){
       })
 }
 
-async function checkSite(lookForError=true){
-     const {status, data} = await axios.get(WEBSITE_URL);
-     const isError = lookForError ? data.toLowerCase().includes(RESPONSE_MUST_NOT_CONTAIN) : false;
-     if(status == 200 && !isError){
-        console.log("This site is up and running!", data);
-        return true;
+function log(data, ...more){
+    console.log(`${new Date()}: ${data}`)
+    if(more && more.length){
+        console.log(more);
     }
-    else{
-        console.log("This site might be down "+status);
-        console.log(data);
+}
+
+async function checkSite(lookForError=true){
+     
+    try {
+        const {status, data} = await axios.get(WEBSITE_URL);
+        const isError = lookForError ? data.toLowerCase().includes(RESPONSE_MUST_NOT_CONTAIN) : false;
+        if(status == 200 && !isError){
+            log("This site is up and running!", data);
+            return true;
+        }
+        else{
+            log("This site might be down "+status);
+            log(data);
+            return false;
+        }
+    } catch(e){
+        log(e);
         return false;
     }
 }
@@ -37,7 +50,7 @@ async function pinger(onSuccess, checkContent=false, timeoutSeconds=3){
     let success = false;
 
     while(!success){
-        console.log(`Checking ${WEBSITE_URL}`);
+        log(`Checking ${WEBSITE_URL}`);
         const isAlive = await ping.promise.probe(WEBSITE_URL, cfg);
         if(isAlive){
             // after we ping, go a step further to look into the response codes and content
@@ -48,7 +61,7 @@ async function pinger(onSuccess, checkContent=false, timeoutSeconds=3){
                 onSuccess();
             }
         } else {
-            console.log('Currently dead');
+            log('Currently dead');
         }
     }
 }
