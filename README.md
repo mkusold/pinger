@@ -1,6 +1,6 @@
 # Website Pinger
 
-This little node script can be used to constantly ping and query a website to alert you when it's up. Useful for high traffic events like Covid vaccine websites, ticketing, raffles etc. or for monitoring development environments.
+This little node script can be used to constantly ping and query a website to alert you when it's up. Useful for high traffic events like ticketing, raffles etc. or for monitoring development environments.
 
 ## Setup
 
